@@ -1,11 +1,14 @@
 #include<bits/stdc++.h>
-#include"board.hpp"
+#include"myboard.hpp"
 
 using namespace std;
 
 void chess_board::init_board(){
   ifstream ifs;
   ifs.open("board.txt");
+  if(ifs.fail()){
+    return ;
+  }
   string s1,s2;
   int i1,i2;
   while(ifs>>s1>>s2>>i1>>i2){
