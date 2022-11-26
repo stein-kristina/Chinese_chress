@@ -8,7 +8,9 @@ enum chess
   Cannon,
   Guard,
   King,
-  Knight,Pawn,Rock
+  Knight,
+  Pawn,
+  Rock
 }; //哈希表
 unordered_map<string, int> chess_index;
 //象，炮，士，帅，马，兵，车
@@ -40,6 +42,9 @@ public:
   bool islimit(int &x,int &y,int &u,int &d,int &l,int &r,bool colour);
   vector<chess_step> generlegalmove(bool colour);//产生所有合理走法
   
+  friend int AlphaBeta(chess_board &chessboard, int depth, int alpha, int beta, bool colour);
+  friend int minmax(chess_board &chessboard, int depth, bool colour);
+
   pair<int,int> makemove(chess_step &tar,bool colour);
   void unmakemove(chess_step &tar,pair<int,int> &dead,bool colour);
 };

@@ -38,6 +38,8 @@ vector<chess_step> chess_board::generlegalmove(bool colour)
   int up, down, left, right;                          //对应棋子的上下左右边界，闭区间
   for (int i = 0; i < 7; i++)
   { //遍历不同棋子
+    int n = it[i].size();
+    if(!n) continue;
     switch (i)
     {
     case 0:
@@ -51,7 +53,7 @@ vector<chess_step> chess_board::generlegalmove(bool colour)
       {
         up = 9, down = 5, left = 0, right = 8; //黑色
       }
-      for (int j = 0; j < 2; j++)
+      for (int j = 0; j < n; j++)
       {
         p1 = it[i][j]; //选择一个象
         if (p1->dead)
@@ -71,12 +73,12 @@ vector<chess_step> chess_board::generlegalmove(bool colour)
       break;
     }
     case 1:
-    { //炮，没写完
+    { //炮
       Ctype *p1 = nullptr;
       up = 9, down = 0, left = 0, right = 8;
       bool f1;
       f1 = true;
-      for (int j = 0; j < 2; j++)
+      for (int j = 0; j < n; j++)
       {
         p1 = it[i][j]; //选择一个炮
         if (p1->dead)
@@ -216,7 +218,7 @@ vector<chess_step> chess_board::generlegalmove(bool colour)
       {
         up = 9, down = 7, left = 3, right = 5; //黑色
       }
-      for (int j = 0; j < 2; j++)
+      for (int j = 0; j < n; j++)
       {
         p1 = it[i][j]; //选择一个士
         if (p1->dead)
@@ -243,7 +245,7 @@ vector<chess_step> chess_board::generlegalmove(bool colour)
       {
         up = 9, down = 7, left = 3, right = 5; //黑色
       }
-      for (int j = 0; j < 1; j++)
+      for (int j = 0; j < n; j++)
       {                // 只有一个
         p1 = it[i][j]; //选择一个
         if (p1->dead)
@@ -263,7 +265,7 @@ vector<chess_step> chess_board::generlegalmove(bool colour)
     { //马
       Ctype *p1 = nullptr;
       up = 9, down = 0, left = 0, right = 8;
-      for (int j = 0; j < 2; j++)
+      for (int j = 0; j < n; j++)
       {
         p1 = it[i][j]; //选择一个
         if (p1->dead)
@@ -307,7 +309,7 @@ vector<chess_step> chess_board::generlegalmove(bool colour)
       {
         up = 4, down = 0, left = 0, right = 8; //黑色
       }
-      for (int j = 0; j < 5; j++)
+      for (int j = 0; j < n; j++)
       {
         p1 = it[i][j]; //选择一个bing
         if (p1->dead)
@@ -347,7 +349,7 @@ vector<chess_step> chess_board::generlegalmove(bool colour)
     { //车
       Ctype *p1 = nullptr;
       up = 9, down = 0, left = 0, right = 8;
-      for (int j = 0; j < 2; j++)
+      for (int j = 0; j < n; j++)
       {
         p1 = it[i][j]; //选择一个bing
         if (p1->dead)

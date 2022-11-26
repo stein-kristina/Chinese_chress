@@ -1,5 +1,6 @@
 #include "myboard.hpp"
 #include"step.hpp"
+#include "score.hpp"
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -14,7 +15,7 @@ void chess_board::init_board(){
   chess_index["Rock"]=6;
   //初始化哈希表
   ifstream ifs;
-  ifs.open("C:\\Users\\86189\\Desktop\\Chinese_chress\\scripts\\board.txt");
+  ifs.open("C:\\Users\\86189\\Desktop\\Chinese_chress\\chinachress\\board.txt");
   if(!ifs.is_open()){
     cout<<"打开文件失败！"<<endl;
     return ;
@@ -26,14 +27,16 @@ void chess_board::init_board(){
     sel = chess_index[s2];
     if(s1 == "Red"){
       p = new Ctype(true,sel,i1,i2,false);
-      
       red[sel].push_back(p);
+      retval.rch_score += chess_weigh[sel];//红棋加分
     }
     else{
       p = new Ctype(false,sel,i1,i2,false);
       black[sel].push_back(p);
+      retval.bch_score += chess_weigh[sel];
     }
     board[i1][i2] = p;
+    retval.red_score += chess_score[sel][i2][i1];//位置加权
   }
   ifs.close();
 }
@@ -56,8 +59,20 @@ pair<int,int> chess_board::makemove(chess_step &tar,bool colour){
         break;
       }
     }
+    //有棋子死了，棋子分数必然发生变化
+    if(colour){//红下黑死
+      retval.bch_score -= chess_weigh[dead->type];
+    }
+    else{
+      retval.rch_score -= chess_weigh[dead->type];
+    }
   }
-  Ctype *move = board[tar.fromx][tar.fromy];
+  if(colour){//权值修改
+    //到我了
+    retval.red_score = retval.red_score - chess_score[tar.typei][tar.fromy][tar.fromx] + chess_score[tar.typei][tar.toy][tar.tox];
+  }
+  vector<vector<Ctype*>> &player = colour ? red : black;
+  Ctype *move = player[tar.typei][tar.typej];
   move->x = tar.tox,move->y = tar.toy;
   board[tar.fromx][tar.fromy] = 0;
   board[tar.tox][tar.toy]=move;
@@ -66,14 +81,26 @@ pair<int,int> chess_board::makemove(chess_step &tar,bool colour){
 
 void chess_board::unmakemove(chess_step &tar,pair<int,int> &dead,bool colour){
   vector<vector<Ctype*>> &it = colour ? black:red;//选择要死的那边的颜色
-  Ctype *back = board[tar.tox][tar.toy];
+
+  vector<vector<Ctype*>> &player = colour ? red : black;
+  Ctype *back = player[tar.typei][tar.typej];
   Ctype *relive = 0;//重生
   if(dead != make_pair(-1,-1)){
     //有棋子死了
-    relive = it[dead.first][dead.second];
+    relive = it[dead.first][dead.second];//dead是死亡棋子在那边的位置
     relive ->dead = false;//活啦
+
+    if(colour){//红下黑死
+      retval.bch_score += chess_weigh[dead.first];
+    }
+    else{
+      retval.rch_score += chess_weigh[dead.first];
+    }
   }
-  
+  if(colour){//权值修改
+    //到我了
+    retval.red_score = retval.red_score + chess_score[tar.typei][tar.fromy][tar.fromx] - chess_score[tar.typei][tar.toy][tar.tox];
+  }
   back->x = tar.fromx,back->y = tar.fromy;
   board[tar.fromx][tar.fromy] = back;
   board[tar.tox][tar.toy] = relive;
