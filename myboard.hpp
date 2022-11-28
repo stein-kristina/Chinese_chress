@@ -33,7 +33,11 @@ private:
 public:
   chess_board()
   {
-    memset(board,0,sizeof(board));//初始化全部nullptr
+    for(int i=0;i<9;i++){
+      for(int j=0;j<10;j++){
+        board[i][j] = nullptr;
+      }
+    }
     black.resize(7);
     red.resize(7);
   }

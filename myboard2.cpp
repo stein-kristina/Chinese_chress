@@ -250,6 +250,20 @@ vector<chess_step> chess_board::generlegalmove(bool colour)
         p1 = it[i][j]; //选择一个
         if (p1->dead)
           continue; //死了就不管了
+        //飞将判定
+        
+          for(int k = 1 ; k <= 9 ; k++ ){
+            int jk = colour ? k : -k;
+            if(p1->y + jk < 0 || p1->y + jk > 9) break;
+            Ctype * p2 =board[p1->x][p1->y + jk];
+            if(!p2) continue;
+            if(p2->type == 3){
+              //可以飞将
+              ans.push_back(chess_step(i, j, p1->x, p1->y, p1->x, p1->y+jk));
+            }
+            break;
+          }
+        
         for (auto &one : canmove[i])
         {
           int ix = p1->x + one.first, iy = p1->y + one.second;
@@ -316,7 +330,8 @@ vector<chess_step> chess_board::generlegalmove(bool colour)
           continue; //死了就不管了
         if (colour)
         {
-          if (p1->y <= 4)
+          int iy = p1->y +1;
+          if (p1->y <= 4 && islimit(p1->x,iy,up,down,left,right,colour))
           {
             ans.push_back(chess_step(i, j, p1->x, p1->y, p1->x, p1->y + 1)); //没过河
             continue;
@@ -324,7 +339,8 @@ vector<chess_step> chess_board::generlegalmove(bool colour)
         }
         else
         {
-          if (p1->y >= 5)
+          int iy = p1->y -1;
+          if (p1->y >= 5 && islimit(p1->x,iy,up,down,left,right,colour))
           {
             ans.push_back(chess_step(i, j, p1->x, p1->y, p1->x, p1->y - 1));
             continue;
@@ -351,9 +367,8 @@ vector<chess_step> chess_board::generlegalmove(bool colour)
       up = 9, down = 0, left = 0, right = 8;
       for (int j = 0; j < n; j++)
       {
-        p1 = it[i][j]; //选择一个bing
-        if (p1->dead)
-          continue;    //死了就不管了
+        p1 = it[i][j]; //选择一个车
+        if (p1->dead) continue;    //死了就不管了
         bool f = true; //用于截胡车的
         for (int zuo = 1; zuo <= 8; zuo++)
         { //左移

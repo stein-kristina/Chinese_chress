@@ -5,7 +5,7 @@ using namespace std;
 struct score
 {
   int red_score;//红棋位置权值
-  int black_score;
+  int black_score;//黑旗位置权值
   int rch_score,bch_score;//红和黑棋子的分数
   score():red_score(0),black_score(0),rch_score(0),bch_score(0){}
 };
