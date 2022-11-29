@@ -8,7 +8,10 @@ struct TreeNode
   TreeNode *left;
   TreeNode *right;
   TreeNode() : left(nullptr), right(nullptr), val(0) {}
+  TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+  TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
+
 
 class A
 {
@@ -23,26 +26,57 @@ public:
     cout << c.a;
   }
 };
-
-double largestSumOfAverages(vector<int> &nums, int k)
+struct Node
 {
-  int n = nums.size();
-  double dp[n+1][k+1];//前n个数字划分k个的最大值
-  memset(dp,0,sizeof(dp));
-  double sum[n+1];
-  sum[0] = 0;
-  for(int i=1;i<=n;i++){
-    sum[i] = sum[i-1] + nums[i-1];
-    dp[i][1] = sum[i] / i;
+  int val;
+  vector<Node*> child;
+  Node(int val=0):val(val){}
+};
+Node * start = nullptr;
+Node* turngraph(TreeNode *root,Node* dad,TreeNode *target){
+  if(!root) return nullptr;
+  Node * it = new Node(root->val);
+  if(target->val == root->val) start = it;
+  if(dad){
+    it->child.push_back(dad);
   }
-  for(int i=1;i<=n;i++){
-    for(int j=2;j<=k;j++){
-      for(int p=0;p<i;p++){
-        dp[i][j] = max(dp[i][j],dp[p][k-1]+ (sum[i]-sum[p])/(i-p));
+  Node* l = turngraph(root->left,it,target);
+  Node * r = turngraph(root->right,it,target);
+  if(l){
+    it->child.push_back(l);
+  }
+  if(r) it->child.push_back(r);
+  return it;
+}
+vector<int> distanceK(TreeNode *root, TreeNode *target, int k)
+{
+  turngraph(root,nullptr,target);
+  unordered_set<Node*> seen;
+  seen.insert(start);
+  queue<Node*> Q;
+  Q.push(start);
+  int ceng = 0;
+  vector<int> ans;
+  while(!Q.empty()){
+    int siz = Q.size();
+    while(siz--){
+      auto p = Q.front();
+      Q.pop();
+      for(auto &i :p->child){
+        if(seen.find(i) == seen.end()){
+          //vis
+          Q.push(i);
+          seen.insert(i);
+          if(ceng == k){
+            ans.push_back(i->val);
+          }
+        }
       }
     }
+    if(ceng == k) break;
+    ceng++;
   }
-  return dp[n][k];
+  return ans;
 }
 typedef unsigned long long ll;
 int main()

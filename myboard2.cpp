@@ -331,18 +331,24 @@ vector<chess_step> chess_board::generlegalmove(bool colour)
         if (colour)
         {
           int iy = p1->y +1;
-          if (p1->y <= 4 && islimit(p1->x,iy,up,down,left,right,colour))
+          if (p1->y <= 4)
           {
-            ans.push_back(chess_step(i, j, p1->x, p1->y, p1->x, p1->y + 1)); //没过河
+            if(board[p1->x][iy] && board[p1->x][iy]->colour == colour){
+              continue;//有棋子而且同色
+            }
+            ans.push_back(chess_step(i, j, p1->x, p1->y, p1->x, iy)); //没过河
             continue;
           }
         }
         else
         {
           int iy = p1->y -1;
-          if (p1->y >= 5 && islimit(p1->x,iy,up,down,left,right,colour))
+          if (p1->y >= 5)
           {
-            ans.push_back(chess_step(i, j, p1->x, p1->y, p1->x, p1->y - 1));
+            if(board[p1->x][iy] && board[p1->x][iy]->colour == colour){
+              continue;//有棋子而且同色
+            }
+            ans.push_back(chess_step(i, j, p1->x, p1->y, p1->x, iy));
             continue;
           }
         }

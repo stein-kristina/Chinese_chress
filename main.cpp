@@ -1,8 +1,5 @@
 #include <bits/stdc++.h>
-#include<iostream>
-#include <string>
-#include <fstream>
-#include <sstream>
+
 #include "score.hpp"
 #include "step.hpp"
 #include "myboard.hpp"
@@ -121,7 +118,7 @@ int main()
   end = clock();
   cout << (double)(end - sta) << "ms\n";
   ofstream outf;
-  outf.open("C:\\Users\\86189\\Desktop\\Chinese_chress\\chinachress\\move.txt");
+  outf.open("move.txt");
   outf << ans;
   outf.close();
   cout << ans << '\n';

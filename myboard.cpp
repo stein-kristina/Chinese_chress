@@ -15,7 +15,7 @@ void chess_board::init_board(){
   chess_index["Rock"]=6;
   //初始化哈希表
   ifstream ifs;
-  ifs.open("C:\\Users\\86189\\Desktop\\Chinese_chress\\chinachress\\board.txt");
+  ifs.open("board.txt");
   if(!ifs.is_open()){
     cout<<"打开文件失败！"<<endl;
     return ;

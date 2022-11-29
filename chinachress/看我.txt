@@ -1,5 +1,0 @@
-先打开文件夹找到路径，把路径复制。
-然后打开cmd，输入下面两行（目录就是那个路径）
-cd 目录
-python -m serv main.exe
-然后打开浏览器输入localhost即可
